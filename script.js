@@ -14,8 +14,10 @@ function getComputerChoice () {
         }
 }
 
+// function to return human choice
 function getHumanChoice () {
-    return prompt("Enter Choice")
+    return prompt("Enter Choice");
 }
 
-console.log(getHumanChoice())
+let humanScore = 0;
+let computerScore = 0;
