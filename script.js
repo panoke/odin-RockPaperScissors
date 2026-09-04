@@ -67,4 +67,5 @@ function playGame () {
     }
 }
 
+// initialise playGame function to start game
 playGame ()
