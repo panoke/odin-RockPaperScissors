@@ -13,3 +13,9 @@ function getComputerChoice () {
             break; 
         }
 }
+
+function getHumanChoice () {
+    return prompt("Enter Choice")
+}
+
+console.log(getHumanChoice())
