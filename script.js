@@ -14,58 +14,90 @@ function getComputerChoice () {
         }
 }
 
-// function to return human choice
-function getHumanChoice () {
-    return prompt("Enter Choice");
+// convert string to title case
+function toTitleCase(string) {
+    const stringArray = string.split("")
+    stringArray[0] = stringArray[0].toUpperCase();
+    return stringArray.join("")
 }
 
+// add button for each of three choices
+const choices = ['Rock', 'Paper', 'Scissors']
+choices.forEach((option) => {
+    const newButton = document.createElement('button');
+    newButton.textContent = option;
+
+    newButton.addEventListener('click', () => {
+        playRound(option, getComputerChoice())
+    })
+
+    document.body.appendChild(newButton);
+})
+
+// add div to show results
+const resultsDiv = document.createElement('div');
+document.body.appendChild(resultsDiv);
+
 // declare and initialise variables to track score
-let humanScore = 0;
+let playerScore = 0;
 let computerScore = 0;
 
 // function to play a single round
-function playRound (humanChoice, computerChoice) {
-
+function playRound (playerChoice, computerChoice) {
     // convert player choice to lower case
-    humanChoice = humanChoice.toLowerCase()
+    playerChoice = playerChoice.toLowerCase()
 
+    // if both select same choice draw
+    if (playerChoice === computerChoice) {
+        resultsDiv.innerText = `Draw! ${toTitleCase(playerChoice)} draws ${toTitleCase(computerChoice)}`
+    }
     // if player has win selection declare win
-    if ((humanChoice == 'paper' && computerChoice == 'rock') || 
-    (humanChoice == 'scissors' && computerChoice == 'paper') ||
-    (humanChoice == 'rock' && computerChoice == 'scissors')) {
-        console.log (`You win! ${humanChoice} beats ${computerChoice}`)
+    else if ((playerChoice == 'paper' && computerChoice == 'rock') || 
+    (playerChoice == 'scissors' && computerChoice == 'paper') ||
+    (playerChoice == 'rock' && computerChoice == 'scissors')) {
+        resultsDiv.innerText = `You win! ${toTitleCase(playerChoice)} beats ${toTitleCase(computerChoice)}`
         // increment player score
-        humanScore++
+        playerScore++
     }
     // else declare win for computer
     else {
-        console.log (`You lose! ${computerChoice} beats ${humanChoice}`)
+        resultsDiv.innerText = `You lose! ${toTitleCase(computerChoice)} beats ${toTitleCase(playerChoice)}`
         // increment computer score
         computerScore++
     }
+
+    // create a score element - variables may be reset before applying
+    const scoreText = document.createTextNode(
+    `Player Score: ${playerScore}, Computer Score: ${computerScore}`,
+    );    
+
+    // check if there's a winner
+    if (computerScore >= 5 || playerScore >= 5)
+    {
+        let winText;
+        if (computerScore > playerScore) {
+                winText = document.createTextNode(
+                    `Computer Wins Game!`
+                );
+        }
+        else {
+                winText = document.createTextNode(
+                    `Congratulations you have won the game!`
+                );
+        }
+
+        // add win text to div
+        resultsDiv.appendChild(document.createElement("br"));
+        resultsDiv.appendChild(winText)
+
+        // reset game
+        computerScore = 0;
+        playerScore = 0;
+
+    }
+
+    // add score text to div
+    resultsDiv.appendChild(document.createElement("br"));
+    resultsDiv.appendChild(scoreText)
 }
 
-// function to play 5 rounds of game
-function playGame () {
-
-    // loop 5 times 
-    for (i = 0; i < 5; i++) {
-        // call human selection
-        const humanSelection = getHumanChoice();
-        // call computer selection
-        const computerSelection = getComputerChoice();
-        // validate selections and select winner, updating score
-        playRound(humanSelection, computerSelection);
-    }
-
-    // if computer has higher score declare winner, otherwise set human as winner 
-    if (computerScore > humanScore) {
-        console.log(`Computer Wins Game! ${humanScore} to ${computerScore}.`)
-    }
-    else {
-        console.log(`Congratulations you have won the game! ${humanScore} to ${computerScore}.`)
-    }
-}
-
-// initialise playGame function to start game
-playGame ()
